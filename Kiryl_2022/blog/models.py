@@ -11,6 +11,9 @@ class Category(models.Model):
     def __str__(self):
         return f'{self.title}'
 
+    def get_posts(self):
+        return reverse('blog-category', args=[self.title])
+
 
 class Post(models.Model):
     title = models.CharField(max_length=250)

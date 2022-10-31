@@ -1,12 +1,22 @@
-{% extends 'blog/base.html' %}
+{% extends 'base.html' %}
 
 {% block title %} Blog index page {% endblock %}
 
 {% block content %}
-    <h2>Все посты</h2>
-    <ul>
-        {%for post in posts%}
-            <li><a href="{{post.get_url}}">{{post.title}}. Created: {{post.created_on}}</a></li>
-        {%endfor%}
-    </ul>
+<div class="col-md-8 offset-md-2">
+    <h1>Блог</h1>
+    <hr>
+    {% for post in posts %}
+        <h2><a href="{{post.get_url}}">{{ post.title }}</a></h2>
+        <small>
+            {{ post.created_on.date }}
+            | Категории:
+            {% for category in post.categories.all %}
+                <a href="{{category.get_posts}}">{{category}}</a>
+            {% endfor %}
+        </small>
+
+        <p>{{ post.body | slice:":400" }}...</p>
+    {% endfor %}
+</div>
 {% endblock %}
