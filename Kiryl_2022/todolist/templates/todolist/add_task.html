@@ -1,0 +1,15 @@
+{%extends 'todolist/base.html'%}
+
+{%block title%} {{title}} {%endblock%}
+
+{%block content%}
+    <h1>Add new task</h1>
+    <form method="post" action="{%url 'index'%}">
+        {%csrf_token%}
+        <input type="text" class="form-control" placeholder="Title"> <br>
+        <textarea class="form-control" placeholder="Description"></textarea> <br>
+        <input type="datetime-local" class="form-control"> <br>
+        <button type="submit" class="btn btn-success">Add</button>
+    </form>
+
+{%endblock%}

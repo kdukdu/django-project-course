@@ -3,7 +3,7 @@ from .models import Task
 
 # Create your views here.
 def index(request):
-    tasks = Task.objects.all()
+    tasks = Task.objects.order_by('-on_create')
     context = {
         'title': 'Main page',
         'tasks': tasks
@@ -13,3 +13,10 @@ def index(request):
 
 def about_us(request):
     return render(request, 'todolist/about_us.html')
+
+
+def add_task(request):
+    context = {
+        'title': 'Add new task'
+    }
+    return render(request, 'todolist/add_task.html')
