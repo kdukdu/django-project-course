@@ -1,5 +1,16 @@
 {%extends 'todolist/base.html'%}
 
-{%block title%} Main page {%endblock%}
+{%block title%} {{title}} {%endblock%}
 
-{%block content%} This is index page {%endblock%}
+{%block content%}
+
+    <h1>Main page</h1>
+    {%for task in tasks%}
+        <div class="alert alert-warning mt-2">
+            <h3>{{task.title}}</h3>
+            <small>Created: {{task.on_create}} | Modified: {{task.on_modified|default:"Not Modified"}}</small>
+            <p>{{task.description}}</p>
+        </div>
+    {%endfor%}
+
+{%endblock%}
