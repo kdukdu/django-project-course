@@ -1,8 +1,11 @@
 from django.urls import path
+
 from .views import *
 
 urlpatterns = [
-    path('', index, name='index'),
-    path('add_task/', add_task, name='add_task'),
-    path('about/', about_us, name='about_us'),
+    path('', TodoIndex.as_view(), name='index'),
+    path('add/', AddTask.as_view(), name='add_task'),
+    path('add_tag/', TagsList.as_view(), name='tags_list'),
+    path('task/delete/<int:pk>', TaskDelete.as_view(), name='task_delete'),
+    path('tag/delete/<int:pk>', TagDelete.as_view(), name='tag_delete'),
 ]

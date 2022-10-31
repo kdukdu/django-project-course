@@ -4,18 +4,18 @@
 
 {%block content%}
 
-    <h1>Main page</h1>
-    {% if tasks %}
-        {%for task in tasks%}
-            <div class="alert alert-warning mt-2">
-                <h3>{{task.title}}</h3>
-                <small>Created: {{task.on_create}} | Modified: {{task.on_modified|default:"Not Modified"}}</small>
-                <p>{{task.description}}</p>
-            </div>
-        {%endfor%}
-    {%else%}
-        <p>There is no any tasks yet... But you can add them!</p>
-    {%endif%}
-
+<h1>Main page</h1>
+{%if tasks%}
+{%for task in tasks%}
+    <div class="alert alert-warning mt-2">
+        <h3>{{task.title}}</h3>
+        <small><b>Deadline: {{task.deadline}}</b> | Created: {{task.on_create}}</small>
+        <p>{{task.description|truncatewords:50}}</p>
+        <a href="{%url 'task_delete' task.pk%}"><button>Delete</button></a>
+    </div>
+{%endfor%}
+{%else%}
+    <p>There is no any tasks yet... But you can add them!</p>
+{%endif%}
 
 {%endblock%}
