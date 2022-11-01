@@ -1,0 +1,13 @@
+{%extends 'todolist/base.html'%}
+
+{%block title%} {{title}} {%endblock%}
+
+{%block content%}
+    <form method="post">
+        {% csrf_token %}
+        {{form}}
+        <div class="text-right">
+            <button type="submit" class="btn btn-success">Save changes</button>
+        </div>
+    </form>
+{%endblock%}

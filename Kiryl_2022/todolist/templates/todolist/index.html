@@ -11,7 +11,18 @@
         <h3>{{task.title}}</h3>
         <small><b>Deadline: {{task.deadline}}</b> | Created: {{task.on_create}}</small>
         <p>{{task.description|truncatewords:50}}</p>
-        <a href="{%url 'task_delete' task.pk%}"><button>Delete</button></a>
+        <small>
+            Tags:
+            {%for tag in task.tags.all%}
+                {{tag}}
+            {%endfor%}
+        </small>
+
+        <div class="text-right">
+            <a href="{%url 'task_edit' task.pk%}"><button>Edit</button></a>
+            <a href="{%url 'task_delete' task.pk%}"><button>Delete</button></a>
+        </div>
+
     </div>
 {%endfor%}
 {%else%}

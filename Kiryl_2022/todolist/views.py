@@ -1,6 +1,5 @@
-from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, DeleteView
+from django.views.generic import ListView, CreateView, DeleteView, UpdateView
 
 from .forms import TaskForm, TagForm
 from .models import Task, Tag
@@ -56,7 +55,6 @@ class TagsList(CreateView):
         return context
 
 
-
 # def add_task(request):
 #     if request.method == 'POST':
 #         form = TaskForm(request.POST)
@@ -77,6 +75,20 @@ class AddTask(CreateView):
     form_class = TaskForm
     template_name = 'todolist/add_task.html'
     success_url = reverse_lazy('index')
+
+
+class TaskEdit(UpdateView):
+    model = Task
+    fields = '__all__'
+    template_name = 'todolist/edit_task.html'
+
+    def get_form(self, *args, **kwargs):
+        form = super(TaskEdit, self).get_form(*args, **kwargs)
+        form.fields["title"].widget.attrs["class"] = "form-control"
+        form.fields["description"].widget.attrs["class"] = "form-control"
+        form.fields["deadline"].widget.attrs["class"] = "form-control"
+        form.fields["tags"].widget.attrs["class"] = "select"
+        return form
 
 
 class TaskDelete(DeleteView):

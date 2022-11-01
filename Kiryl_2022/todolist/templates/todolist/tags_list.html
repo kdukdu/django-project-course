@@ -1,0 +1,38 @@
+{%extends 'todolist/base.html'%}
+
+{%block title%} {{title}} {%endblock%}
+
+{%block content%}
+<h4>You can add new tags by filling the form below</h4>
+<form method="post" action="{%url 'tags_list'%}">
+    <div class="row">
+        <div class="col">
+            {%csrf_token%}
+            {{form.name}}
+        </div>
+        <div class="col">
+            <button type="submit" class="btn btn-success">Add</button>
+        </div>
+    </div>
+</form>
+
+<h2>Tags list</h2>
+<ul>
+    {%for tag in tags%}
+        <li>
+            {{tag}}
+            <form action="{%url 'tag_delete' tag.pk%}" method="post">
+                {%csrf_token%}
+                <input type="submit" value="Delete">
+            </form>
+        </li>
+    {%empty%}
+        <h4>There isn't any tags</h4>
+    {%endfor%}
+</ul>
+
+
+
+
+
+{%endblock%}
