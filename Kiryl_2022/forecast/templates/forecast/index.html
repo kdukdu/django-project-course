@@ -1,9 +1,63 @@
-{%extends 'forecast/base.html'%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-{%block title%}
-    Main page
-{%endblock%}
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 
-{%block content%}
-    Forecast app
-{%endblock%}
+    <title>{%block title%} {%endblock%}</title>
+</head>
+
+<header>
+    <!--Navbar-->
+    {%include 'includes/navbar.html'%}
+    <!--End Navbar-->
+</header>
+
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-5 offset-1">
+                <h1>Weather in your city</h1>
+                <form method="post" action="/forecast/">
+                    {%csrf_token%}
+                    {% for field in form%}
+                        {%if not field.errors%}
+                            {{field}}
+                        {%else%}
+                            <input type="text" name="name" class="form-control is-invalid" id="id_name" placeholder="Enter city" required>
+                            <div class="invalid-feedback">
+                                {{field.errors.as_text}}
+                            </div>
+                        {%endif%}
+                    {%endfor%}
+                    <input type="submit" name="send" value="Check" class="mt-2 btn btn-danger">
+                </form>
+            </div>
+            <div class="col-5 offset-1">
+                <h1>Last requests</h1>
+                {%for info in all_cities_info%}
+                <div class="alert alert-info">
+                    <div class="row">
+                        <div class="col-9">
+                            <p><b>City:</b> {{info.name}}</p>
+                            <p><b>Temperature:</b> {{info.temperature}}<sup>o</sup>C</p>
+                        </div>
+                        <div class="col-2 offset-1">
+                            <img src="http://openweathermap.org/img/w/{{info.icon}}.png" alt="icon" class="img-thumbnail">
+                        </div>
+                    </div>
+                </div>
+                {%empty%}
+                    <div class="alert alert-danger">
+                        There is not any requests yet :(
+                    </div>
+                {%endfor%}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
