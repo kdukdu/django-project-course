@@ -1,0 +1,43 @@
+{%extends 'weather_app/base.html'%}
+{%block content%}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-4 offset-1">
+            <h1>Weather in your city</h1>
+            <form method="post">
+                {%csrf_token%}
+                {%if not form.errors%}
+                    <input type="text" name="name" class="form-control" placeholder="Enter city" maxlength="30" required="" id="id_name">
+                {%else%}
+                    <input type="text" name="name" class="form-control is-invalid" id="id_name" placeholder="Enter city" required>
+                    <div class="invalid-feedback">
+                        {{form.errors.as_text}}
+                    </div>
+                {%endif%}
+                <input type="submit" name="send" value="Check" class="mt-2 btn btn-danger">
+            </form>
+        </div>
+        <div class="col-4 offset-1">
+            <h1>Last requests</h1>
+            {%for city in cities%}
+            <div class="alert alert-info" style="padding-top: 10px; padding-bottom: 10px;">
+                <div class="row">
+                    <div class="col-6" style="width: 244px">
+                        <p><b>City:</b> {{city.name}}</p>
+                        <p><b>As of:</b> {{city.time}}</p>
+                        <p><b>Temperature:</b> {{city.temperature}}<sup>o</sup>C</p>
+                    </div>
+                    <div class="col-1 mt-4 offset-3" style="margin-left: 40px;">
+                        <img src="http://openweathermap.org/img/w/{{city.icon}}.png" alt="icon" class="img">
+                    </div>
+                </div>
+            </div>
+            {%empty%}
+                <div class="alert alert-danger">
+                    There is not any requests yet :(
+                </div>
+            {%endfor%}
+        </div>
+    </div>
+</div>
+{%endblock%}

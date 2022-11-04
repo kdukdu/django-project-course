@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from forecast.models import City
+from weather_app.models import City
 
 # Register your models here.
 

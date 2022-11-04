@@ -23,5 +23,5 @@ urlpatterns = [
     path('project/', include('project.urls')),
     path('blog/', include('blog.urls')),
     path('todolist/', include('todolist.urls')),
-    path('forecast/', include('forecast.urls')),
+    path('weather/', include('weather_app.urls')),
 ]

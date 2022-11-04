@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'project.apps.ProjectConfig',
     'blog.apps.BlogConfig',
     'todolist.apps.TodolistConfig',
-    'forecast.apps.ForecastConfig'
+    'weather_app.apps.WeatherAppConfig'
 ]
 
 MIDDLEWARE = [

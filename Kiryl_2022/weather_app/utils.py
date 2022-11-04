@@ -1,4 +1,8 @@
+from datetime import datetime
+
 import requests
+
+from weather_app.models import City
 
 WEATHER_TOKEN = '2fd6d5c272d1eef15c8baff08893c4fa'
 
@@ -13,10 +17,12 @@ def get_weather_info(city: str):
         name = response['name']
         temperature = round(response['main']['temp'])
         icon = response['weather'][0]['icon']
+        time = datetime.fromtimestamp(response['dt'])
 
     context = {
         'name': name,
         'temperature': temperature,
-        'icon': icon
+        'icon': icon,
+        'time': time
     }
     return context
