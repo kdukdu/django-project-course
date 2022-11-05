@@ -1,0 +1,56 @@
+{%extends 'weather_app/base.html'%}
+
+{%block content%}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-4 offset-1">
+            <h1>All Weather Requests</h1>
+            {%for city in cities%}
+            <div class="alert alert-info" style="padding-top: 10px; padding-bottom: 10px;">
+                <div class="row">
+                    <div class="col-6" style="width: 244px">
+                        <p><b>City:</b> {{city.name}}</p>
+                        <p><b>As of:</b> {{city.time}}</p>
+                        <p><b>Temperature:</b> {{city.temperature}}<sup>o</sup>C</p>
+                    </div>
+                    <div class="col-1 mt-4 offset-3" style="margin-left: 40px;">
+                        <img src="http://openweathermap.org/img/w/{{city.icon}}.png" alt="icon" class="img" width="60px">
+                    </div>
+
+                    <div class="col-1 align-self-end" style="padding-left: 22px;">
+                        <form action="{%url 'request_delete' city.pk%}" method="post">
+                            {%csrf_token%}
+                            <input type="submit" class="btn btn-outline-secondary btn-sm" value="Delete" name="requests-delete-from-list">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {%empty%}
+            <div class="alert alert-danger" style="padding-top: 10px; padding-bottom: 10px;">
+                <div class="row">
+                    <div class="col-8">
+                        <p>There is not any requests yet :(</p>
+                        <p>But you can make them :)</p>
+                    </div>
+                    <div class="col-4 align-self-end">
+                        <a class="btn btn-primary" href="{%url 'index'%}" role="button">Tap here!</a>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+
+    <!--Paginator-->
+    <div class="row offset-1">
+        {%if page_obj.paginator.count > 4%}
+            {%include 'includes/paginator.html'%}
+        {%endif%}
+    </div>
+    <!--End Paginator-->
+
+</div>
+
+{%endblock%}
+

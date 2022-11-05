@@ -19,7 +19,7 @@
         </div>
         <div class="col-4 offset-1">
             <h1>Last requests</h1>
-            {%for city in cities%}
+            {%for city in cities|slice:":4"%}
             <div class="alert alert-info" style="padding-top: 10px; padding-bottom: 10px;">
                 <div class="row">
                     <div class="col-6" style="width: 244px">
@@ -28,7 +28,13 @@
                         <p><b>Temperature:</b> {{city.temperature}}<sup>o</sup>C</p>
                     </div>
                     <div class="col-1 mt-4 offset-3" style="margin-left: 40px;">
-                        <img src="http://openweathermap.org/img/w/{{city.icon}}.png" alt="icon" class="img">
+                        <img src="http://openweathermap.org/img/w/{{city.icon}}.png" alt="icon" class="img" width="60px">
+                    </div>
+                    <div class="col-1 align-self-end" style="padding-left: 22px;">
+                        <form action="{%url 'request_delete' city.pk%}" method="post">
+                            {%csrf_token%}
+                            <input type="submit" class="btn btn-outline-secondary btn-sm" value="Delete">
+                        </form>
                     </div>
                 </div>
             </div>
@@ -37,6 +43,13 @@
                     There is not any requests yet :(
                 </div>
             {%endfor%}
+            {% if cities|length > 4 %}
+            <div class="text-end">
+                <a href="{%url 'requests'%}">
+                    <button type="button" class="btn btn-primary">Show all</button>
+                </a>
+            </div>
+            {%endif%}
         </div>
     </div>
 </div>
