@@ -3,7 +3,7 @@ from django.views.generic import CreateView, ListView, DeleteView
 
 from weather_app.forms import CityForm
 from weather_app.models import City
-from weather_app.utils import get_weather_info
+from weather_app.utils import get_weather_info, get_weather_by_user_location
 
 
 # Create your views here.
@@ -17,6 +17,7 @@ class MainPage(CreateView):
     def get_context_data(self, **kwargs):
         context = super(MainPage, self).get_context_data(**kwargs)
         context['cities'] = City.objects.order_by('-pk')
+        context['user_location_weather'] = get_weather_by_user_location()
         return context
 
     def form_valid(self, form):
