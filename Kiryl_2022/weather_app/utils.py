@@ -6,31 +6,17 @@ import requests
 WEATHER_TOKEN = '2fd6d5c272d1eef15c8baff08893c4fa'
 
 
-def get_weather_info(city: str):
-    response = requests.get(
-        f'https://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={WEATHER_TOKEN}').json()
+def get_weather(city: str = None) -> [dict, None]:
+    if city == None:
+        lat, lon = geocoder.ip('me').latlng
+        response = requests.get(
+            f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={WEATHER_TOKEN}').json()
+    else:
+        response = requests.get(
+            f'https://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={WEATHER_TOKEN}').json()
 
     if response['cod'] == '404':
         return None
-    else:
-        name = response['name']
-        temperature = round(response['main']['temp'])
-        icon = response['weather'][0]['icon']
-        time = datetime.fromtimestamp(response['dt'])
-
-    context = {
-        'name': name,
-        'temperature': temperature,
-        'icon': icon,
-        'time': time
-    }
-    return context
-
-
-def get_weather_by_user_location() -> dict:
-    lat, lon = geocoder.ip('me').latlng
-    response = requests.get(
-        f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={WEATHER_TOKEN}').json()
 
     city = response['name']
     temperature = round(response['main']['temp'])
