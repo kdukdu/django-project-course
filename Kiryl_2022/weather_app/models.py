@@ -14,3 +14,15 @@ class City(models.Model):
     class Meta:
         verbose_name = 'City'
         verbose_name_plural = 'Cities'
+
+
+class CityList(models.Model):
+    name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'CityList'
+        verbose_name_plural = 'CityLists'
+        ordering = ('-pk',)
