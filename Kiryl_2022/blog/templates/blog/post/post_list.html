@@ -1,0 +1,28 @@
+{% extends 'blog/base.html' %}
+
+{% block title %} Blog index page {% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Блог</h1>
+    <hr>
+    {% for post in posts %}
+    <div class="container pt-2 pb-2 bg-light text-dark">
+        <h2><a href="{{ post.get_absolute_url}}" style="text-decoration: none;">{{ post.title }}</a></h2>
+        <small>
+            <i>Published: {{ post.publish }} by {{ post.author }}</i>
+            <p>
+                <b>Tags:</b>
+            {%for tag in post.tags.all%}
+                <a href="{%url 'post-list-by-tag' tag%}" style="text-decoration: none;">{{tag}}</a>
+            {%endfor%}
+            </p>
+        </small>
+        <p>{{ post.body|truncatewords:30|linebreaks }}</p>
+    </div>
+    {% endfor %}
+
+    {%include 'blog/includes/paginator.html'%}
+</div>
+
+{% endblock %}

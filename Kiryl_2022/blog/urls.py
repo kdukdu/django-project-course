@@ -1,8 +1,10 @@
-from django.urls import path
+from django.urls import re_path
 from . import views
 
+
 urlpatterns = [
-    path('', views.blog_index, name='blog-index'),
-    path('<int:post_id>', views.blog_detail, name='blog-detail'),
-    path('category/<str:category>', views.blog_category, name='blog-category')
+    re_path(r'^$', views.PostListView.as_view(), name='post-list'),
+    re_path(r'^tag/(?P<tag_slug>[-\w]+)/$', views.PostListView.as_view(), name='post-list-by-tag'),
+    re_path(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/(?P<slug>[-\w]+)/$', views.post_detail,
+            name='post_detail'),
 ]

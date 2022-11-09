@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'project.apps.ProjectConfig',
     'blog.apps.BlogConfig',
     'todo_app.apps.TodoAppConfig',
-    'weather_app.apps.WeatherAppConfig'
+    'weather_app.apps.WeatherAppConfig',
+    'taggit'
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,55 @@
+{% extends 'blog/base.html' %}
+
+{% block title %} {{post.title}} {% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{post.title}}</h2>
+    <hr>
+    <small>
+        <u>Published</u>: {{ post.publish }} by {{ post.author }} |
+        <u>Tags</u>:
+        {%for tag in post.tags.all%}
+            <a href="{%url 'post-list-by-tag' tag%}">{{tag}}</a>
+        {%endfor%}
+    </small>
+    <p>
+        {{post.body|linebreaks}}
+    </p>
+</div>
+
+
+<div class="container">
+    {% with comments.count as total_comments %}
+    <h3>
+        {{ total_comments }} comment{{ total_comments|pluralize }}
+    </h3>
+    {% endwith %}
+
+    {% for comment in comments %}
+    <div class="alert alert-info">
+        <span class="badge text-bg-success">Comment #{{ forloop.counter }}</span> by {{ comment.author }} {{ comment.created }}
+        <p>{{ comment.body|linebreaks }}</p>
+    </div>
+    {% empty %}
+    <p>There are no comments yet.</p>
+    {% endfor %}
+</div>
+
+<div class="container">
+    <h3>Add a new comment</h3>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group col-6">
+            {{comment_form.as_p}}
+        </div>
+        <button type="submit" class="btn btn-primary">Add comment</button>
+    </form>
+    <hr>
+</div>
+
+{% endblock %}
+
+
+
+

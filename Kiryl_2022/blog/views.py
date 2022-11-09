@@ -1,43 +1,49 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Post, Comment
+from django.views.generic import ListView
+from taggit.models import Tag
+
 from .forms import CommentForm
+from .models import Post
 
 
 # Create your views here.
-def blog_index(request):
-    posts = Post.objects.order_by('-created_on')
-    context = {
-        'posts': posts
-    }
-    return render(request, 'blog/blog_index.html', context=context)
+class PostListView(ListView):
+    model = Post
+    context_object_name = 'posts'
+    paginate_by = 3
+    template_name = 'blog/post/post_list.html'
+
+    def get_queryset(self):
+        if not self.kwargs:
+            return Post.objects.all()
+        else:
+            tag = get_object_or_404(Tag, slug=self.kwargs['tag_slug'].lower())
+            return Post.objects.filter(tags__in=[tag])
 
 
-def blog_detail(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
+def post_detail(request, year, month, day, slug):
+    post = get_object_or_404(Post, slug=slug,
+                             status='published',
+                             publish__year=year,
+                             publish__month=month,
+                             publish__day=day,
+                             )
+    comments = post.comments.filter(active=True)
+
     if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = Comment(
-                author=form.cleaned_data['author'],
-                body=form.cleaned_data['body'],
-                post=post
-            )
-            comment.save()
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.post = post
+            new_comment.save()
+            comment_form = CommentForm()
     else:
-        form = CommentForm()
-    comments = Comment.objects.filter(post=post)
+        comment_form = CommentForm()
+
     context = {
         'post': post,
         'comments': comments,
-        'form': form
+        'comment_form': comment_form,
     }
-    return render(request, 'blog/blog_detail.html', context=context)
+    return render(request, 'blog/post/post_detail.html', context=context)
 
-
-def blog_category(request, category):
-    posts = Post.objects.filter(categories__title__contains=category).order_by('-created_on')
-    context = {
-        'category': category,
-        'posts': posts
-    }
-    return render(request, 'blog/blog_category.html', context=context)
