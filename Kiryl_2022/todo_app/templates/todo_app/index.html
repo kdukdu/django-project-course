@@ -1,10 +1,10 @@
-{%extends 'todolist/base.html'%}
+{%extends 'todo_app/base.html'%}
 
 {%block title%} {{title}} {%endblock%}
 
 {%block content%}
 
-<h1>Main page</h1>
+<h1>All tasks</h1>
 {%if tasks%}
 {%for task in tasks%}
     <div class="alert alert-warning mt-2">
@@ -14,13 +14,13 @@
         <small>
             Tags:
             {%for tag in task.tags.all%}
-                {{tag}}
+            <a href="{%url 'tag_filter' tag%}">{{tag}}</a>
             {%endfor%}
         </small>
 
         <div class="text-right">
-            <a href="{%url 'task_edit' task.pk%}"><button>Edit</button></a>
-            <a href="{%url 'task_delete' task.pk%}"><button>Delete</button></a>
+            <a href="{%url 'task_edit' task.pk%}"><button class="btn btn-primary">Edit</button></a>
+            <a href="{%url 'task_delete' task.pk%}"><button class="btn btn-danger">Delete</button></a>
         </div>
 
     </div>

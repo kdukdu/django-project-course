@@ -8,13 +8,14 @@ from .models import Task, Tag
 # Create your views here.
 
 
-class TodoIndex(ListView):
+class MainPage(ListView):
     model = Task
-    template_name = 'todolist/index.html'
+    template_name = 'todo_app/index.html'
     context_object_name = 'tasks'
+    paginate_by = 6
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(TodoIndex, self).get_context_data(**kwargs)
+        context = super(MainPage, self).get_context_data(**kwargs)
         context['title'] = 'Main page'
         return context
 
@@ -22,28 +23,9 @@ class TodoIndex(ListView):
         return Task.objects.order_by('-on_create')
 
 
-# def tags_list(request):
-#     tags = Tag.objects.all()
-#
-#     if request.method == 'POST':
-#         form = TagForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             # return redirect('index')
-#     else:
-#         form = TagForm()
-#
-#     context = {
-#         'title': 'Tags list',
-#         'form': form,
-#         'tags': tags
-#     }
-#     return render(request, 'todolist/tags_list.html', context=context)
-
-
 class TagsList(CreateView):
     form_class = TagForm
-    template_name = 'todolist/tags_list.html'
+    template_name = 'todo_app/tags_list.html'
     model = Tag
     context_object_name = 'tags'
     success_url = reverse_lazy('tags_list')
@@ -55,32 +37,16 @@ class TagsList(CreateView):
         return context
 
 
-# def add_task(request):
-#     if request.method == 'POST':
-#         form = TaskForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('index')
-#     else:
-#         form = TaskForm()
-#
-#     context = {
-#         'title': 'Add new task',
-#         'form': form
-#     }
-#     return render(request, 'todolist/add_task.html', context=context)
-
-
 class AddTask(CreateView):
     form_class = TaskForm
-    template_name = 'todolist/add_task.html'
-    success_url = reverse_lazy('index')
+    template_name = 'todo_app/add_task.html'
+    success_url = reverse_lazy('index_todo')
 
 
 class TaskEdit(UpdateView):
     model = Task
     fields = '__all__'
-    template_name = 'todolist/edit_task.html'
+    template_name = 'todo_app/edit_task.html'
 
     def get_form(self, *args, **kwargs):
         form = super(TaskEdit, self).get_form(*args, **kwargs)
@@ -93,10 +59,24 @@ class TaskEdit(UpdateView):
 
 class TaskDelete(DeleteView):
     model = Task
-    template_name = 'todolist/task_confirm_delete.html'
-    success_url = reverse_lazy("index")
+    template_name = 'todo_app/task_confirm_delete.html'
+    success_url = reverse_lazy("index_todo")
 
 
 class TagDelete(DeleteView):
     model = Tag
     success_url = reverse_lazy('tags_list')
+
+
+class TasksFilterByTag(ListView):
+    model = Task
+    template_name = 'todo_app/tasks_filter_by_tag.html'
+    context_object_name = 'tasks'
+
+    def get_queryset(self):
+        return Task.objects.filter(tags__name=self.kwargs['tag_slug'])
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(TasksFilterByTag, self).get_context_data(**kwargs)
+        context['tag_slug'] = self.kwargs['tag_slug']
+        return context
