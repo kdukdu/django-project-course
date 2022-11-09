@@ -31,29 +31,20 @@
                 <div class="col-1">
                     <form action="{%url 'request_delete' city.pk%}" method="post">
                         {%csrf_token%}
+                        {%if cities|length > 1%}
                         <input type="submit" class="btn btn-outline-secondary btn-sm" name="requests-delete-from-list"
                                value="Delete">
+                        {%else%}
+                        <input type="submit" class="btn btn-outline-secondary btn-sm" name="requests-delete-from-list-reverse-index"
+                               value="Delete">
+                        {%endif%}
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
-    {%empty%}
-    <div class="container">
-        <div class="alert alert-danger">
-            <div class="row">
-                <div class="col">
-                    <p>There is not any requests yet :(</p>
-                    <p>But you can make them :)</p>
-                </div>
-                <div class="col align-self-end">
-                    <a class="btn btn-primary" href="{%url 'index'%}" role="button">Tap here!</a>
-                </div>
-            </div>
-        </div>
-    </div>
     {%endfor%}
+
 </div>
 
 <!--Paginator-->

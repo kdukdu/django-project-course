@@ -23,11 +23,10 @@ class MainPage(CreateView):
             context['delete'] = None
 
         try:
-            context['weather'] = get_weather(CityList.objects.order_by('-pk')[0].name)
+            context['weather'] = get_weather(CityList.objects.all().latest('pk').name)
         except:
             context['weather'] = get_weather()
 
-        # context['list_cities'] = City.objects.values('name').distinct()
         return context
 
     def form_valid(self, form):
@@ -36,7 +35,6 @@ class MainPage(CreateView):
         form.instance.temperature = info['temperature']['actual']
         form.instance.icon = info['icon']
         form.instance.time = info['time']
-        form.instance.res = info['time']
         form.save()
         return super().form_valid(form)
 
@@ -51,10 +49,10 @@ class RequestsList(ListView):
 class RequestDelete(DeleteView):
     model = City
 
-    def get_success_url(self):
+    def get_success_url(self, **kwargs):
         if self.request.POST.get('requests-delete-from-list'):
             return reverse_lazy('requests')
-        else:
+        elif self.request.POST.get('request-delete-from-list-reverse-index'):
             return reverse_lazy('index')
 
 
