@@ -3,7 +3,8 @@
 {% block title %} {{post.title}} {% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container pt-4">
+    <hr>
     <h2>{{post.title}}</h2>
     <hr>
     <small>
@@ -18,13 +19,24 @@
     </p>
 </div>
 
+<div class="container">
+    <hr>
+    <h4>Similar posts:</h4>
+    {%for post in similar_posts%}
+        <p>
+            <a href="{{post.get_absolute_url}}">{{post.title}}</a>
+        </p>
+    {%endfor%}
+</div>
 
 <div class="container">
+    <hr>
     {% with comments.count as total_comments %}
     <h3>
         {{ total_comments }} comment{{ total_comments|pluralize }}
     </h3>
     {% endwith %}
+
 
     {% for comment in comments %}
     <div class="alert alert-info">
@@ -37,6 +49,7 @@
 </div>
 
 <div class="container">
+    <hr>
     <h3>Add a new comment</h3>
     <form method="post">
         {% csrf_token %}
@@ -45,7 +58,6 @@
         </div>
         <button type="submit" class="btn btn-primary">Add comment</button>
     </form>
-    <hr>
 </div>
 
 {% endblock %}

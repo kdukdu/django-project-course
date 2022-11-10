@@ -40,10 +40,14 @@ def post_detail(request, year, month, day, slug):
     else:
         comment_form = CommentForm()
 
+    # List of similar posts
+    similar_posts = post.tags.similar_objects()[:4]
+
     context = {
         'post': post,
         'comments': comments,
         'comment_form': comment_form,
+        'similar_posts': similar_posts
     }
     return render(request, 'blog/post/post_detail.html', context=context)
 
