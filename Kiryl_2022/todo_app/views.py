@@ -28,7 +28,7 @@ class TagsList(CreateView):
     template_name = 'todo_app/tags_list.html'
     model = Tag
     context_object_name = 'tags'
-    success_url = reverse_lazy('tags_list')
+    success_url = reverse_lazy('todo:tags_list')
 
     def get_context_data(self, **kwargs):
         context = super(TagsList, self).get_context_data(**kwargs)
@@ -40,7 +40,7 @@ class TagsList(CreateView):
 class AddTask(CreateView):
     form_class = TaskForm
     template_name = 'todo_app/add_task.html'
-    success_url = reverse_lazy('index_todo')
+    success_url = reverse_lazy('todo:index')
 
 
 class TaskEdit(UpdateView):
@@ -60,12 +60,12 @@ class TaskEdit(UpdateView):
 class TaskDelete(DeleteView):
     model = Task
     template_name = 'todo_app/task_confirm_delete.html'
-    success_url = reverse_lazy("index_todo")
+    success_url = reverse_lazy("todo:index")
 
 
 class TagDelete(DeleteView):
     model = Tag
-    success_url = reverse_lazy('tags_list')
+    success_url = reverse_lazy('todo:tags_list')
 
 
 class TasksFilterByTag(ListView):

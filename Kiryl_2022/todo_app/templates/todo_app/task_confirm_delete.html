@@ -13,7 +13,7 @@
 <form method="POST">
     {% csrf_token %}
     <button class="btn btn-danger" type="submit">Yes, delete</button>
-    <a href="{%url 'index_todo'%}"><button class="btn btn-primary" type="button">Cancel</button></a>
+    <a href="{%url 'todo:index'%}"><button class="btn btn-primary" type="button">Cancel</button></a>
 </form>
 
 {% endblock %}

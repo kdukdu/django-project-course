@@ -17,7 +17,7 @@ class Task(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('index_todo')
+        return reverse('todo:index')
 
 
 class Tag(models.Model):

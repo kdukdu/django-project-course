@@ -12,7 +12,7 @@ from weather_app.utils import get_weather
 class MainPage(CreateView):
     form_class = CityForm
     template_name = 'weather_app/index.html'
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('weather:index')
 
     def get_context_data(self, **kwargs):
         context = super(MainPage, self).get_context_data(**kwargs)
@@ -51,9 +51,9 @@ class RequestDelete(DeleteView):
 
     def get_success_url(self, **kwargs):
         if self.request.POST.get('requests-delete-from-list'):
-            return reverse_lazy('requests')
+            return reverse_lazy('weather:requests-list')
         elif self.request.POST.get('request-delete-from-list-reverse-index'):
-            return reverse_lazy('index')
+            return reverse_lazy('weather:index')
 
 
 class GetUserLocationWeather(DeleteView):
@@ -61,4 +61,4 @@ class GetUserLocationWeather(DeleteView):
 
     def get_success_url(self):
         CityList.objects.all().delete()
-        return reverse_lazy('index')
+        return reverse_lazy('weather:index')

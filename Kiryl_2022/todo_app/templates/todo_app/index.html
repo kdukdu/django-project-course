@@ -14,13 +14,13 @@
         <small>
             Tags:
             {%for tag in task.tags.all%}
-            <a href="{%url 'tag_filter' tag%}">{{tag}}</a>
+            <a href="{%url 'todo:tag_filter' tag%}">{{tag}}</a>
             {%endfor%}
         </small>
 
         <div class="text-right">
-            <a href="{%url 'task_edit' task.pk%}"><button class="btn btn-primary">Edit</button></a>
-            <a href="{%url 'task_delete' task.pk%}"><button class="btn btn-danger">Delete</button></a>
+            <a href="{%url 'todo:task_edit' task.pk%}"><button class="btn btn-primary">Edit</button></a>
+            <a href="{%url 'todo:task_delete' task.pk%}"><button class="btn btn-danger">Delete</button></a>
         </div>
 
     </div>

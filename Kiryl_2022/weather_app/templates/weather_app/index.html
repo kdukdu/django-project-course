@@ -5,7 +5,7 @@
 <div class="container">
     <div class="text-center">
         {%if delete%}
-        <form action="{%url 'get_user_location_weather' delete.pk%}" method="post" name="delete">
+        <form action="{%url 'weather:get-user-location-weather' delete.pk%}" method="post" name="delete">
             {%csrf_token%}
             <h3 style="color: #C0C0C0; cursor: pointer;" onclick='document.delete.submit();'>
                 Click to get weather in your city
@@ -112,7 +112,7 @@
         <div class="col">
             {% if cities|length > 4 %}
             <div class="text-end">
-                <a href="{%url 'requests'%}">
+                <a href="{%url 'weather:requests-list'%}">
                     <button type="button" class="btn btn-primary">Show all</button>
                 </a>
             </div>
@@ -144,7 +144,7 @@
 
         <div class="row justify-content-md-center">
             <div class="col-1">
-                <form action="{%url 'request_delete' city.pk%}" method="post">
+                <form action="{%url 'weather:request-delete' city.pk%}" method="post">
                     {%csrf_token%}
                     <input type="submit" class="btn btn-outline-secondary btn-sm" name="request-delete-from-list-reverse-index" value="Delete">
                 </form>

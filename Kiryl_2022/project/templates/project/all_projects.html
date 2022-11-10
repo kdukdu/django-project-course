@@ -14,7 +14,7 @@
                 <div class="card-body">
                   <h5 class="card-title">{{project.title}}</h5>
                   <p class="card-text">{{ project.description }}</p>
-                  <a href="{% url 'project-detail' project.id %}"
+                  <a href="{% url 'project:project-detail' project.id %}"
                     class="btn btn-primary">
                     Подробнее
                   </a>
