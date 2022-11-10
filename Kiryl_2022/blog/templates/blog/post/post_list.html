@@ -13,7 +13,7 @@
             <p>
                 <b>Tags:</b>
             {%for tag in post.tags.all%}
-                <a href="{%url 'post-list-by-tag' tag%}" style="text-decoration: none;">{{tag}}</a>
+                <a href="{%url 'blog:post-list-by-tag' tag%}" style="text-decoration: none;">{{tag}}</a>
             {%endfor%}
             </p>
         </small>
