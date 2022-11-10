@@ -3,7 +3,6 @@
 {% block title %} Blog index page {% endblock %}
 
 {% block content %}
-<div class="container">
     <h1>Блог</h1>
     <hr>
     {% for post in posts %}
@@ -23,6 +22,5 @@
     {% endfor %}
 
     {%include 'blog/includes/paginator.html'%}
-</div>
 
 {% endblock %}

@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+{%load post_tags%}
+
 <html lang="en">
 <head>
     <!-- Required meta tags -->
@@ -14,6 +16,7 @@
 
 <body>
 
+<!--Navbar-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
         <a class="navbar-brand" href="{% url 'project-index' %}">Портфолио</a>
@@ -33,8 +36,35 @@
         </div>
     </div>
 </nav>
+<!--Navbar-->
 
-{%block content%} {%endblock%}
+<!--Sidebar-->
+<div class="d-flex flex-row mb-3">
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light">
+        <h3>My Blog</h3>
+        <p>This is my blog. I've written {% total_posts %} posts so far.</p>
+
+        <h3>Latest posts</h3>
+        {%show_latest_posts%}
+
+        <h3>Most commented posts</h3>
+        {% get_most_commented_posts as most_commented_posts%}
+        {% for post in most_commented_posts%}
+            <li>
+                <a href="{{post.get_absolute_url}}">{{post.title}}</a>
+            </li>
+        {%endfor%}
+
+
+    </div>
+    <!--Sidebar-->
+
+
+    <div class="d-flex flex-column p-2 bg-light">
+        {%block content%} {%endblock%}
+    </div>
+</div>
+
 
 </body>
 </html>
