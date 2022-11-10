@@ -7,7 +7,7 @@
     <h1>Блог</h1>
     <hr>
     {% for post in posts %}
-    <div class="container pt-2 pb-2 bg-light text-dark">
+    <div class="container shadow-lg pt-2 pb-2 mb-2 bg-light text-dark">
         <h2><a href="{{ post.get_absolute_url}}" style="text-decoration: none;">{{ post.title }}</a></h2>
         <small>
             <i>Published: {{ post.publish }} by {{ post.author }}</i>
