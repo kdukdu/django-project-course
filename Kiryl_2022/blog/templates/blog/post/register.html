@@ -1,0 +1,32 @@
+{% extends 'blog/base.html' %}
+
+{% block title %} {{title}} {% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>{{title}}</h2>
+    <hr>
+    <form method="post">
+        {%csrf_token%}
+        {%for field in form%}
+        <div class="row mb-2">
+            <label for="{{field.id_for_label}}" class="col-2">{{field.label}}: </label>
+            <div class="col-3">
+                {{field}}
+            </div>
+            <div>{{field.errors}}</div>
+        </div>
+        {%endfor%}
+        <div class="row">
+            <div class="col-5">
+                <div class="text-end">
+                    <button class="btn btn-primary">Регистрация</button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+{% endblock %}

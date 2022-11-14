@@ -1,8 +1,11 @@
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView
+from django.contrib.auth import logout, login
+from django.contrib.auth.views import LoginView
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView
 from taggit.models import Tag
 
-from .forms import CommentForm
+from .forms import CommentForm, RegisterUserForm, LoginUserForm
 from .models import Post
 
 
@@ -51,3 +54,36 @@ def post_detail(request, year, month, day, slug):
     }
     return render(request, 'blog/post/post_detail.html', context=context)
 
+
+class RegisterUser(CreateView):
+    form_class = RegisterUserForm
+    template_name = 'blog/post/register.html'
+    success_url = reverse_lazy('login')
+
+    def get_context_data(self, **kwargs):
+        context = super(RegisterUser, self).get_context_data(**kwargs)
+        context['title'] = 'Регистрация'
+        return context
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('blog:index')
+
+
+class LoginUser(LoginView):
+    form_class = LoginUserForm
+    template_name = 'blog/post/login.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(LoginUser, self).get_context_data(**kwargs)
+        context['title'] = 'Авторизация'
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('blog:index')
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('blog:login')
