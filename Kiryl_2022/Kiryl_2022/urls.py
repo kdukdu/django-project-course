@@ -26,6 +26,7 @@ urlpatterns = [
     path('blog/', include('blog.urls', 'blog')),
     path('todo/', include('todo_app.urls', 'todo')),
     path('weather/', include('weather_app.urls', 'weather')),
+    path('shop/', include('shop.urls', 'shop')),
 ]
 
 if settings.DEBUG:
