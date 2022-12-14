@@ -1,0 +1,60 @@
+{%extends 'weather_app/base.html'%}
+
+{%block content%}
+
+<div class="container">
+    <h2 class="text-center">All Weather Requests</h2>
+
+    {%for city in cities%}
+    <div class="container">
+        <div class="alert alert-info">
+            <div class="row justify-content-md-center">
+                <div class="col-2">
+                    <div class="text-center">
+                        <p class="text-info" style="margin-bottom: 0px;">{{city.time}}</p>
+                        <h5>{{city.name}}</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-md-center">
+                <div class="col-1">
+                    <img src="http://openweathermap.org/img/w/{{city.icon}}.png" alt="icon" class="img"
+                         width="60px">
+                </div>
+                <div class="col-1">
+                    <h2>{{city.temperature}}°C</h2>
+                </div>
+            </div>
+
+            <div class="row justify-content-md-center">
+                <div class="col-1">
+                    <form action="{%url 'weather:request-delete' city.pk%}" method="post">
+                        {%csrf_token%}
+                        {%if cities|length > 1%}
+                        <input type="submit" class="btn btn-outline-secondary btn-sm" name="requests-delete-from-list"
+                               value="Delete">
+                        {%else%}
+                        <input type="submit" class="btn btn-outline-secondary btn-sm" name="request-delete-from-list-reverse-index"
+                               value="Delete">
+                        {%endif%}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {%endfor%}
+
+</div>
+
+<!--Paginator-->
+<div class="row offset-1">
+    {%if page_obj.paginator.count > 4%}
+    {%include 'weather_app/includes/paginator.html'%}
+    {%endif%}
+</div>
+<!--End Paginator-->
+
+
+{%endblock%}
+
