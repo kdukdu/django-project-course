@@ -7,13 +7,17 @@ WEATHER_TOKEN = '2fd6d5c272d1eef15c8baff08893c4fa'
 
 
 def get_weather(city: str = None) -> [dict, None]:
-    if city == None:
+    url = 'https://api.openweathermap.org/data/2.5/weather'
+    if city is None:
         lat, lon = geocoder.ip('me').latlng
-        response = requests.get(
-            f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={WEATHER_TOKEN}').json()
+        response = requests.get(url, params={'lat': lat,
+                                             'lon': lon,
+                                             'units': 'metric',
+                                             'appid': WEATHER_TOKEN}).json()
     else:
-        response = requests.get(
-            f'https://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={WEATHER_TOKEN}').json()
+        response = requests.get(url, params={'q': city,
+                                             'units': 'metric',
+                                             'appid': WEATHER_TOKEN}).json()
 
     if response['cod'] == '404':
         return None
