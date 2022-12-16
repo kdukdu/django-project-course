@@ -20,9 +20,9 @@ class PostListView(ListView):
 
     def get_queryset(self):
         if not self.kwargs:
-            return Post.objects.all()
+            return Post.objects.filter(status='published')
         else:
-            tag = get_object_or_404(Tag, slug=self.kwargs['tag_slug'].lower())
+            tag = get_object_or_404(Tag, status='published', slug=self.kwargs['tag_slug'].lower())
             return Post.objects.filter(tags__in=[tag])
 
 
