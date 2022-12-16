@@ -22,8 +22,8 @@ class PostListView(ListView):
         if not self.kwargs:
             return Post.objects.filter(status='published')
         else:
-            tag = get_object_or_404(Tag, status='published', slug=self.kwargs['tag_slug'].lower())
-            return Post.objects.filter(tags__in=[tag])
+            tag = get_object_or_404(Tag, slug=self.kwargs['tag_slug'].lower())
+            return Post.objects.filter(status='published', tags__in=[tag])
 
 
 def post_detail(request, year, month, day, slug):
