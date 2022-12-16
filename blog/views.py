@@ -1,11 +1,12 @@
 from django.contrib.auth import logout, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 from taggit.models import Tag
 
-from .forms import CommentForm, RegisterUserForm, LoginUserForm
+from .forms import CommentForm, RegisterUserForm, LoginUserForm, PostAddForm
 from .models import Post
 
 
@@ -55,6 +56,25 @@ def post_detail(request, year, month, day, slug):
     return render(request, 'blog/post/post_detail.html', context=context)
 
 
+@login_required(login_url='/blog/login')
+def post_add(request):
+    if request.method == 'POST':
+        form = PostAddForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            form.save_m2m()
+            form = PostAddForm()
+    else:
+        form = PostAddForm()
+
+    context = {
+        'form': form
+    }
+    return render(request, 'blog/post/post_add.html', context=context)
+
+
 class RegisterUser(CreateView):
     form_class = RegisterUserForm
     template_name = 'blog/post/register.html'
@@ -62,7 +82,7 @@ class RegisterUser(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(RegisterUser, self).get_context_data(**kwargs)
-        context['title'] = 'Регистрация'
+        context['title'] = 'Register'
         return context
 
     def form_valid(self, form):
@@ -77,11 +97,12 @@ class LoginUser(LoginView):
 
     def get_context_data(self, **kwargs):
         context = super(LoginUser, self).get_context_data(**kwargs)
-        context['title'] = 'Авторизация'
+        context['title'] = 'Login'
         return context
 
     def get_success_url(self):
-        return reverse_lazy('blog:index')
+        next_url = self.request.GET.get('next')
+        return next_url or reverse_lazy('blog:index')
 
 
 def logout_user(request):

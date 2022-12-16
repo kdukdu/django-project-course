@@ -1,8 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from taggit.forms import TagWidget
 
-from .models import Comment
+from .models import Comment, Post
 
 
 class CommentForm(forms.ModelForm):
@@ -34,3 +35,15 @@ class RegisterUserForm(UserCreationForm):
 class LoginUserForm(AuthenticationForm):
     username = forms.CharField(label='Username', widget=forms.TextInput(attrs={'class': 'form-control'}))
     password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
+
+class PostAddForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ('title', 'body', 'status', 'tags')
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'body': forms.Textarea(attrs={'class': 'form-control', "cols": "40", "rows": "4"}),
+            'status': forms.Select(attrs={'class': 'form-control'}),
+            'tags': TagWidget(attrs={'class': 'form-control'})
+        }
