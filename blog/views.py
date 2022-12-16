@@ -89,7 +89,7 @@ def post_add(request):
             post.author = request.user
             post.save()
             form.save_m2m()
-            form = PostAddForm()
+            return redirect(post)
     else:
         form = PostAddForm()
 
