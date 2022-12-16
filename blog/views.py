@@ -1,6 +1,7 @@
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
@@ -56,6 +57,29 @@ def post_detail(request, year, month, day, slug):
     return render(request, 'blog/post/post_detail.html', context=context)
 
 
+@login_required()
+def post_edit(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.user != post.author:
+        return HttpResponse('Unauthorized', status=401)
+
+    form = PostAddForm(instance=post)
+    if request.method == 'POST':
+        form = PostAddForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            post.title = cd['title']
+            post.body = cd['body']
+            post.status = cd['status']
+            post.tags.clear()
+            post.save()
+            for tag in cd['tags']:
+                post.tags.add(tag)
+            return redirect(post.get_absolute_url())
+
+    return render(request, 'blog/post/post_edit.html', context={'form': form})
+
+
 @login_required(login_url='/blog/login')
 def post_add(request):
     if request.method == 'POST':
@@ -105,6 +129,7 @@ class LoginUser(LoginView):
         return next_url or reverse_lazy('blog:index')
 
 
+@login_required()
 def logout_user(request):
     logout(request)
     return redirect('blog:login')
