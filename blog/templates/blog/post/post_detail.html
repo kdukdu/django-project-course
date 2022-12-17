@@ -34,13 +34,20 @@
           </i>
         </small>
       </div>
+      {%if request.user == post.author%}
       <div class="col text-end">
-        {%if request.user == post.author%}
-        <a href="{%url 'blog:post-edit' post.pk%}" class="btn btn-secondary btn-sm">Edit</a>
-        {%endif%}
+        <form method="POST" action="{% url 'blog:post-delete' post.pk %}">
+          <a href="{%url 'blog:post-edit' post.pk%}" class="btn btn-secondary btn-sm">Edit</a>
+          {% csrf_token %}
+          <button class="btn btn-secondary btn-sm" type="submit" value="DELETE"
+                  onclick="return confirm('Are you sure that you want to delete {{post.title}}')">
+            <i class="fa fa-trash-o"></i>
+            Delete
+          </button>
+        </form>
       </div>
+      {%endif%}
     </div>
-
     <p>
       {{post.body|linebreaks}}
     </p>

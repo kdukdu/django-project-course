@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView
 from taggit.models import Tag
 
@@ -97,6 +97,14 @@ def post_add(request):
         'form': form
     }
     return render(request, 'blog/post/post_add.html', context=context)
+
+
+@login_required()
+def post_delete(request, pk):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, pk=pk)
+        post.delete()
+        return redirect(reverse('blog:index'))
 
 
 class RegisterUser(CreateView):
