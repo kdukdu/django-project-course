@@ -29,7 +29,7 @@
             <b>Author</b>: {{ post.author }} |
             <b>Tags:</b>
             {%for tag in post.tags.all%}
-            <a href="{%url 'blog:post-list-by-tag' tag%}" style="text-decoration: none;">{{tag}}</a>
+            <a href="{%url 'blog:post-list-by-tag' tag.slug%}" style="text-decoration: none;">{{tag}}</a>
             {%endfor%}
           </i>
         </small>
