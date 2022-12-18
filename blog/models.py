@@ -1,9 +1,10 @@
-from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
 from taggit.managers import TaggableManager
+
+from main import settings
 
 
 class Post(models.Model):
@@ -14,7 +15,7 @@ class Post(models.Model):
 
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique_for_date='publish')
-    author = models.ForeignKey(User, related_name='blog_posts', on_delete=models.CASCADE)
+    author = models.OneToOneField('CustomUser', related_name='posts', on_delete=models.CASCADE)
     body = models.TextField()
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
@@ -53,3 +54,17 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ('created',)
+
+
+class CustomUser(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+                                unique=True,
+                                on_delete=models.CASCADE,
+                                related_name='custom_user')
+    first_name = models.CharField("First name", max_length=150, blank=True)
+    last_name = models.CharField("Last name", max_length=150, blank=True)
+    email = models.EmailField("Email", blank=False, unique=True)
+    profile_picture = models.ImageField(upload_to='blog/users/profile_pictures/%Y/%m/%d/', blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user.username}"

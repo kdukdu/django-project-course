@@ -36,7 +36,7 @@
         <ul class="navbar-nav ms-auto">
           {%if request.user.is_authenticated%}
           <li class="nav-item active">
-            <a class="nav-link" href="#">{{user.username}}</a>
+            <a class="nav-link" href="{%url 'blog:profile'%}">{{request.user.username}}</a>
           </li>
           <li class="nav-item active">
             <a class="nav-link" href="{% url 'blog:logout' %}">Logout</a>
@@ -104,11 +104,11 @@
             <div class="collapse" id="account-collapse">
               <ul>
                 {%if request.user.is_authenticated%}
-                  <li><a href="#" class="link-dark rounded">Profile</a></li>
-                  <li><a href="{%url 'blog:logout'%}" class="link-dark rounded">Logout</a></li>
+                <li><a href="{%url 'blog:profile'%}" class="link-dark rounded">Profile</a></li>
+                <li><a href="{%url 'blog:logout'%}" class="link-dark rounded">Logout</a></li>
                 {%else%}
-                  <li><a href="{%url 'blog:register'%}" class="link-dark rounded">Register</a></li>
-                  <li><a href="{%url 'blog:login'%}" class="link-dark rounded">Login</a></li>
+                <li><a href="{%url 'blog:register'%}" class="link-dark rounded">Register</a></li>
+                <li><a href="{%url 'blog:login'%}" class="link-dark rounded">Login</a></li>
                 {%endif%}
               </ul>
             </div>

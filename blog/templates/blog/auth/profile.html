@@ -1,0 +1,64 @@
+{% extends 'blog/base.html' %}
+{%load static%}
+
+{% block title %} {{title}} {% endblock %}
+
+{% block content %}
+<div class="shadow-lg p-3 mb-3 bg-light text-dark">
+  <div class="card">
+    <h5 class="card-header">Profile</h5>
+    <div class="card-body">
+      {%if user.profile_picture%}
+      <img src="{{user.profile_picture.url}}" alt="user profile picture" class="rounded float-end" height="200"
+           border="1">
+      {%else%}
+      <img src="{%static 'img/placeholders/user-placeholder.jpg'%}" alt="user profile placeholder"
+           class="rounded float-end" height="200" border="1">
+      {%endif%}
+      <p class="card-text"><b>Username:</b> {{user.user.username}}</p>
+      <p class="card-text"><b>First name:</b> {{user.first_name}}</p>
+      <p class="card-text"><b>Last name:</b> {{user.last_name}}</p>
+      <p class="card-text"><b>Email:</b> {{user.email}}</p>
+      <p class="card-text"><b>Last login:</b> {{user.user.last_login}}</p>
+    </div>
+  </div>
+</div>
+<div class="shadow-lg p-3 mb-3 bg-light text-dark">
+  <div class="card">
+    <h5 class="card-header">Update profile</h5>
+    <div class="card-body">
+      <form action="{%url 'blog:profile'%}" method="post" enctype="multipart/form-data" style="max-width: 750px">
+        {%csrf_token%}
+        <p>
+          <label class="form-label" for="{{form.first_name.id_for_label}}"><b>{{form.first_name.label}}</b></label><br>
+          <input type="text" class="form-control" name="{{form.first_name.name}}" id="{{form.first_name.id_for_label}}"
+                 value="{{user.first_name}}">
+        </p>
+        <p>
+          <label class="form-label" for="{{form.last_name.id_for_label}}"><b>{{form.last_name.label}}</b></label><br>
+          <input type="text" class="form-control" name="{{form.last_name.name}}" id="{{form.last_name.id_for_label}}"
+                 value="{{user.last_name}}">
+        </p>
+        <p>
+          <label for="{{form.email.id_for_label}}">{{form.email.label}}:</label>
+          <input type="email" class="form-control" name="{{form.email.name}}" id="{{form.email.id_for_label}}"
+                 value="{{user.email}}">
+        </p>
+        <p>
+          <label for="{{form.profile_picture.id_for_label}}">{{form.profile_picture.label}}</label>
+          <input type="file" class="form-control" name="{{form.profile_picture.name}}"
+                 id="{{form.profile_picture.id_for_label}}" accept="image/*">
+          {%if user.profile_picture%}
+          Currently you picture is <a href="{{user.profile_picture.url}}">{{user.profile_picture}}</a><br>
+          <input type="checkbox" name="profile_picture-clear" id="profile_picture-clear_id">
+          <label for="profile_picture-clear_id">Clear</label>
+          {%endif%}
+        </p>
+        <button type="submit" class="btn btn-primary btn-sm">Save changes</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

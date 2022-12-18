@@ -79,8 +79,7 @@
                 {%csrf_token%}
                 {%if not form.errors%}
                 <div class="input-group mb-3">
-                    <input type="text" name="name" class="form-control" placeholder="Enter city" maxlength="30"
-                           required="" id="id_name">
+                    <input type="text" name="name" class="form-control" placeholder="Enter city" maxlength="30" required="">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="submit" name="send">Check</button>
                     </div>
@@ -96,7 +95,6 @@
                         {{form.errors.name.as_text}}
                     </div>
                 </div>
-
                 {%endif%}
             </form>
         </div>
@@ -153,7 +151,7 @@
     </div>
 </div>
 {%empty%}
-<div class="container">
+<div class="container alert alert-danger">
     <div class="alert alert-danger">
         <p class="text-center">There is not any requests yet :(</p>
     </div>

@@ -3,12 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 from taggit.models import Tag
 
-from .forms import CommentForm, RegisterUserForm, LoginUserForm, PostAddForm
-from .models import Post
+from .forms import CommentForm, RegisterUserForm, LoginUserForm, PostAddForm, ProfileUserForm
+from .models import Post, CustomUser
 
 
 # Create your views here.
@@ -60,7 +60,7 @@ def post_detail(request, year, month, day, slug):
 @login_required()
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    if request.user != post.author:
+    if request.user.custom_user != post.author:
         return HttpResponse('Unauthorized', status=401)
 
     form = PostAddForm(instance=post)
@@ -75,7 +75,7 @@ def post_edit(request, pk):
             post.save()
             for tag in cd['tags']:
                 post.tags.add(tag)
-            return redirect(post.get_absolute_url())
+            return redirect(post)
 
     return render(request, 'blog/post/post_edit.html', context={'form': form})
 
@@ -86,7 +86,7 @@ def post_add(request):
         form = PostAddForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
-            post.author = request.user
+            post.author = request.user.custom_user
             post.save()
             form.save_m2m()
             return redirect(post)
@@ -104,12 +104,12 @@ def post_delete(request, pk):
     if request.method == 'POST':
         post = get_object_or_404(Post, pk=pk)
         post.delete()
-        return redirect(reverse('blog:index'))
+        return redirect('blog:index')
 
 
 class RegisterUser(CreateView):
     form_class = RegisterUserForm
-    template_name = 'blog/post/register.html'
+    template_name = 'blog/auth/register.html'
     success_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
@@ -119,13 +119,16 @@ class RegisterUser(CreateView):
 
     def form_valid(self, form):
         user = form.save()
+        email = form.cleaned_data.get('email')
+        CustomUser.objects.create(user=user,
+                                  email=email)
         login(self.request, user)
         return redirect('blog:index')
 
 
 class LoginUser(LoginView):
     form_class = LoginUserForm
-    template_name = 'blog/post/login.html'
+    template_name = 'blog/auth/login.html'
 
     def get_context_data(self, **kwargs):
         context = super(LoginUser, self).get_context_data(**kwargs)
@@ -134,10 +137,26 @@ class LoginUser(LoginView):
 
     def get_success_url(self):
         next_url = self.request.GET.get('next')
-        return next_url or reverse_lazy('blog:index')
+        return next_url or reverse_lazy('blog:profile')
 
 
 @login_required()
 def logout_user(request):
     logout(request)
     return redirect('blog:login')
+
+
+@login_required()
+def profile(request):
+    user = request.user.custom_user
+    form = ProfileUserForm(instance=user)
+    if request.method == "POST":
+        form = ProfileUserForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+
+    context = {
+        'user': user,
+        'form': form,
+    }
+    return render(request, 'blog/auth/profile.html', context=context)
