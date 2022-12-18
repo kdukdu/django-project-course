@@ -23,6 +23,7 @@
     </div>
   </div>
 </div>
+{%if request.user.custom_user == user %}
 <div class="shadow-lg p-3 mb-3 bg-light text-dark">
   <div class="card">
     <h5 class="card-header">Update profile</h5>
@@ -60,6 +61,7 @@
     </div>
   </div>
 </div>
+{%endif%}
 
 
 {% endblock %}

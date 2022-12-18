@@ -162,3 +162,13 @@ def profile(request):
         'form': form,
     }
     return render(request, 'blog/auth/profile.html', context=context)
+
+
+def author_profile_info(request, username):
+    author = get_object_or_404(CustomUser, user__username=username)
+    if request.user.custom_user == author:
+        return redirect('blog:profile')
+    context = {
+        'user': author
+    }
+    return render(request, 'blog/auth/profile.html', context=context)
