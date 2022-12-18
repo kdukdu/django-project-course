@@ -19,11 +19,10 @@ class PostListView(ListView):
     template_name = 'blog/post/post_list.html'
 
     def get_queryset(self):
-        if not self.kwargs:
-            return Post.objects.filter(status='published')
-        else:
+        if self.kwargs.get('tag_slug', ''):
             tag = get_object_or_404(Tag, slug=self.kwargs['tag_slug'].lower())
             return Post.objects.filter(status='published', tags__in=[tag])
+        return Post.objects.filter(status='published')
 
 
 def post_detail(request, year, month, day, slug):
@@ -104,8 +103,10 @@ def post_add(request):
 def post_delete(request, pk):
     if request.method == 'POST':
         post = get_object_or_404(Post, pk=pk)
-        post.delete()
-        return redirect('blog:index')
+        if request.user.custom_user == post.author:
+            post.delete()
+            return redirect('blog:index')
+        return HttpResponse('You are not allowed to do this action!')
 
 
 class RegisterUser(CreateView):
@@ -147,7 +148,7 @@ def logout_user(request):
     return redirect('blog:login')
 
 
-@login_required()
+@login_required(login_url='/blog/register')
 def profile(request):
     user = request.user.custom_user
     form = ProfileUserForm(instance=user)
