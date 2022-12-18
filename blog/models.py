@@ -42,11 +42,9 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-    author = models.CharField(max_length=50)
-    email = models.EmailField()
-    body = models.TextField()
+    author = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='comments')
+    body = models.TextField('Comment')
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
 
     def __str__(self):

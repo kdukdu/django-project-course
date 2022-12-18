@@ -40,6 +40,7 @@ def post_detail(request, year, month, day, slug):
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
             new_comment.post = post
+            new_comment.author = request.user.custom_user
             new_comment.save()
             comment_form = CommentForm()
     else:
@@ -51,7 +52,7 @@ def post_detail(request, year, month, day, slug):
     context = {
         'post': post,
         'comments': comments,
-        'comment_form': comment_form,
+        'form': comment_form,
         'similar_posts': similar_posts
     }
     return render(request, 'blog/post/post_detail.html', context=context)

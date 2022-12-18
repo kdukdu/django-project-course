@@ -56,9 +56,9 @@
   <div>
     <hr>
     {% with comments.count as total_comments %}
-    <h3>
+    <h5>
       {{ total_comments }} comment{{ total_comments|pluralize }}
-    </h3>
+    </h5>
     {% endwith %}
 
 
@@ -79,13 +79,15 @@
   <div>
     <hr>
     {%if request.user.is_authenticated%}
-    <h3>Add a new comment</h3>
-    <form method="post">
+    <h5>Add a new comment</h5>
+    <form method="post" style="max-width: 750px">
       {% csrf_token %}
-      <div class="form-group col-6">
-        {{comment_form.as_p}}
-      </div>
-      <button type="submit" class="btn btn-primary">Add comment</button>
+      <textarea class="form-control" name="{{form.body.name}}" id="{{form.body.id_for_label}}" cols="30"
+                rows="10"></textarea>
+      <br>
+      <p class="text-end">
+        <button type="submit" class="btn btn-primary">Add comment</button>
+      </p>
     </form>
     {%else%}
     <h5><a href="{%url 'blog:register'%}">Register</a> or <a href="{%url 'blog:login'%}">login</a> to leave comments
