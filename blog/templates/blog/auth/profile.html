@@ -63,5 +63,18 @@
 </div>
 {%endif%}
 
+<div class="shadow-lg p-3 mb-3 bg-light text-dark">
+  <div class="card">
+    <h5 class="card-header">{{user.user.username|title}} posts</h5>
+    <div class="card-body">
+      {%for post in author_posts%}
+      <p class="card-text">
+        <a href="{{post.get_absolute_url}}">{{post.title}}</a> - {{post.created}}
+      </p>
+      {%endfor%}
+    </div>
+  </div>
+</div>
+
 
 {% endblock %}

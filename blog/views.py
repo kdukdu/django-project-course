@@ -149,26 +149,22 @@ def logout_user(request):
 
 
 @login_required(login_url='/blog/register')
-def profile(request):
-    user = request.user.custom_user
-    form = ProfileUserForm(instance=user)
+def profile(request, username=None):
+    if username and username != request.user.username:
+        author = get_object_or_404(CustomUser, user__username=username)
+    else:
+        author = request.user.custom_user
+
+    author_posts = Post.objects.filter(author=author).order_by('-created')
+    form = ProfileUserForm(instance=author)
     if request.method == "POST":
-        form = ProfileUserForm(request.POST, request.FILES, instance=user)
+        form = ProfileUserForm(request.POST, request.FILES, instance=author)
         if form.is_valid():
             form.save()
 
     context = {
-        'user': user,
+        'user': author,
         'form': form,
-    }
-    return render(request, 'blog/auth/profile.html', context=context)
-
-
-def author_profile_info(request, username):
-    author = get_object_or_404(CustomUser, user__username=username)
-    if request.user.custom_user == author:
-        return redirect('blog:profile')
-    context = {
-        'user': author
+        'author_posts': author_posts
     }
     return render(request, 'blog/auth/profile.html', context=context)

@@ -26,7 +26,7 @@
       <div class="col">
         <small>
           <i><b>Published</b>: {{ post.publish }} |
-            <b>Author</b>: <a href="{%url 'blog:author_profile_info' post.author%}">{{ post.author.user }}</a> |
+            <b>Author</b>: <a href="{%url 'blog:profile' post.author%}">{{ post.author.user }}</a> |
             <b>Tags:</b>
             {%for tag in post.tags.all%}
             <a href="{%url 'blog:post-list-by-tag' tag.slug%}" style="text-decoration: none;">{{tag}}</a>
