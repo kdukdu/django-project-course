@@ -124,7 +124,7 @@ class RegisterUser(CreateView):
         CustomUser.objects.create(user=user,
                                   email=email)
         login(self.request, user)
-        return redirect('blog:index')
+        return redirect('blog:profile')
 
 
 class LoginUser(LoginView):

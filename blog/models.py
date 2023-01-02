@@ -1,4 +1,6 @@
+from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
@@ -66,3 +68,12 @@ class CustomUser(models.Model):
 
     def __str__(self):
         return f"{self.user.username}"
+
+
+# When creating a superuser, the corresponding CustomUser model object will be created
+def create_user_profile(sender, instance, created, **kwargs):
+    if created and instance.is_superuser:
+        profile, created = CustomUser.objects.get_or_create(user=instance)
+
+
+post_save.connect(create_user_profile, sender=User)
