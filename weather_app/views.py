@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DeleteView
 
@@ -17,14 +18,17 @@ class MainPage(CreateView):
     def get_context_data(self, **kwargs):
         context = super(MainPage, self).get_context_data(**kwargs)
         context['cities'] = City.objects.order_by('-pk')
+
         try:
             context['delete'] = CityList.objects.all()[0]
-        except:
+            # if there was a search query, the button "Click to get weather in your city" will be shown
+        except IndexError:
             context['delete'] = None
 
         try:
             context['weather'] = get_weather(CityList.objects.all().latest('pk').name)
-        except:
+            # weather for the latest query city will be shown
+        except ObjectDoesNotExist:
             context['weather'] = get_weather()
 
         return context
@@ -59,6 +63,9 @@ class RequestDelete(DeleteView):
 class GetUserLocationWeather(DeleteView):
     model = CityList
 
-    def get_success_url(self):
+    def form_valid(self, form):
         CityList.objects.all().delete()
+        return super().form_valid(form)
+
+    def get_success_url(self):
         return reverse_lazy('weather:index')
