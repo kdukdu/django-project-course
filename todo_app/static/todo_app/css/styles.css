@@ -1,0 +1,15 @@
+.bi-trash3 {
+  color: red;
+  float: right;
+  cursor: pointer;
+}
+
+.task-completed {
+  text-decoration: line-through;
+}
+
+
+.task-status-checkbox {
+  cursor: pointer;
+  margin-right: 10px;
+}

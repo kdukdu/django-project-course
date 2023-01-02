@@ -1,82 +1,36 @@
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, DeleteView, UpdateView
+from django.views.generic import ListView, DeleteView
 
-from .forms import TaskForm, TagForm
-from .models import Task, Tag
-
-
-# Create your views here.
+from .models import Task
 
 
-class MainPage(ListView):
+class TasksList(ListView):
     model = Task
     template_name = 'todo_app/index.html'
     context_object_name = 'tasks'
-    paginate_by = 6
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(MainPage, self).get_context_data(**kwargs)
-        context['title'] = 'Main page'
-        return context
+    paginate_by = 5
 
     def get_queryset(self):
-        return Task.objects.order_by('-on_create')
+        return Task.objects.order_by('-created')
 
 
-class TagsList(CreateView):
-    form_class = TagForm
-    template_name = 'todo_app/tags_list.html'
-    model = Tag
-    context_object_name = 'tags'
-    success_url = reverse_lazy('todo:tags_list')
+def task_create(request):
+    title = request.POST.get('title')
+    Task.objects.create(title=title)
 
-    def get_context_data(self, **kwargs):
-        context = super(TagsList, self).get_context_data(**kwargs)
-        tags = Tag.objects.order_by('-pk')
-        context['tags'] = tags
-        return context
+    return redirect("todo:index")
 
 
-class AddTask(CreateView):
-    form_class = TaskForm
-    template_name = 'todo_app/add_task.html'
-    success_url = reverse_lazy('todo:index')
+def task_update(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    is_completed = request.POST.get('is_completed', False)
+    task.is_completed = bool(is_completed)
+    task.save()
+    return redirect("todo:index")
 
 
-class TaskEdit(UpdateView):
-    model = Task
-    fields = '__all__'
-    template_name = 'todo_app/edit_task.html'
-
-    def get_form(self, *args, **kwargs):
-        form = super(TaskEdit, self).get_form(*args, **kwargs)
-        form.fields["title"].widget.attrs["class"] = "form-control"
-        form.fields["description"].widget.attrs["class"] = "form-control"
-        form.fields["deadline"].widget.attrs["class"] = "form-control"
-        form.fields["tags"].widget.attrs["class"] = "select"
-        return form
-
-
-class TaskDelete(DeleteView):
-    model = Task
-    template_name = 'todo_app/task_confirm_delete.html'
-    success_url = reverse_lazy("todo:index")
-
-
-class TagDelete(DeleteView):
-    model = Tag
-    success_url = reverse_lazy('todo:tags_list')
-
-
-class TasksFilterByTag(ListView):
-    model = Task
-    template_name = 'todo_app/tasks_filter_by_tag.html'
-    context_object_name = 'tasks'
-
-    def get_queryset(self):
-        return Task.objects.filter(tags__name=self.kwargs['tag_slug'])
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(TasksFilterByTag, self).get_context_data(**kwargs)
-        context['tag_slug'] = self.kwargs['tag_slug']
-        return context
+def task_delete(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.delete()
+    return redirect("todo:index")

@@ -1,32 +1,71 @@
-{%extends 'todo_app/base.html'%}
+{% extends 'todo_app/base.html' %}
 
-{%block title%} {{title}} {%endblock%}
+{% block title %} Todo list {% endblock %}
 
-{%block content%}
-
-<h1>All tasks</h1>
-{%if tasks%}
-{%for task in tasks%}
-    <div class="alert alert-warning mt-2">
-        <h3>{{task.title}}</h3>
-        <small><b>Deadline: {{task.deadline}}</b> | Created: {{task.on_create}}</small>
-        <p>{{task.description|truncatewords:50}}</p>
-        <small>
-            Tags:
-            {%for tag in task.tags.all%}
-            <a href="{%url 'todo:tag_filter' tag%}">{{tag}}</a>
-            {%endfor%}
-        </small>
-
-        <div class="text-right">
-            <a href="{%url 'todo:task_edit' task.pk%}"><button class="btn btn-primary">Edit</button></a>
-            <a href="{%url 'todo:task_delete' task.pk%}"><button class="btn btn-danger">Delete</button></a>
+{% block content %}
+<div class="container">
+    <!--Header-->
+    <div class="row mb-4 mt-4">
+        <div class="offset-md-2 col-lg-9">
+            <h1>Todo List</h1>
         </div>
-
     </div>
-{%endfor%}
-{%else%}
-    <p>There is no any tasks yet... But you can add them!</p>
-{%endif%}
+    <!--Header-->
 
-{%endblock%}
+    <!--Add task-->
+    <div class="row">
+        <div class="offset-md-2 col-lg-10">
+            <form action="{%url 'todo:task_create'%}" method="post">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="title" placeholder="Add task" required>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" name="submit" class="btn btn-outline-primary">
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--Add task-->
+    <hr/>
+
+    <!--Tasks list-->
+    <div class="row">
+        <div class="offset-md-2 col-lg-6">
+            <div class="list-group">
+                {% if tasks %}
+                {% for task in tasks %}
+                <div class="list-group-item {% if task.is_completed %}task-completed{% endif %} mt-2">
+                    <small><b>Created:</b> {{ task.created }} | <b>Updated:</b> {{ task.updated }}</small><br>
+                    <form style="display: inline;" action="{% url 'todo:task_update' task.pk %}" method="post">
+                        {% csrf_token %}
+                        <input type="checkbox" name="is_completed" onchange="this.form.submit()"
+                               class="task-status-checkbox"
+                               {% if task.is_completed %} checked {% endif %}>
+                    </form>
+                    {{ task.title }}
+                    <a href="{% url 'todo:task_delete' task.pk %}" title="Delete"
+                       onclick="return confirm('Are you sure you want to delete task:\n{{ task.title }}')">
+                        <i class="bi bi-trash3"></i>
+                    </a>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p>There is no any tasks yet... But you can add them!</p>
+                {% endif %}
+                <br>
+                <!-- Paginator -->
+                {% include 'todo_app/includes/paginator.html' %}
+                <!-- End Paginator -->
+            </div>
+
+        </div>
+    </div>
+    <!--Tasks list-->
+</div>
+
+{% endblock %}
