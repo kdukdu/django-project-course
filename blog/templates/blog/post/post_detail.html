@@ -67,7 +67,7 @@
       <span class="badge text-bg-primary">
         Comment #{{ forloop.counter }}
       </span>
-      <small>{{ comment.created }} by {{ comment.author }}</small>
+      <small>{{ comment.created }} by <a href="{% url 'blog:profile' comment.author %}">{{ comment.author }}</a></small>
       <p>{{ comment.body|linebreaks }}</p>
     </div>
     {% empty %}
