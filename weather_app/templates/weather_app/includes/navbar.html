@@ -1,11 +1,13 @@
-<div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
-    <a href="{%url 'weather:index'%}" class="d-flex align-items-center text-dark text-decoration-none">
-        <span class="fs-4">WeatherApp</span>
-    </a>
-
-    <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
-        <a class="me-3 py-2 text-dark text-decoration-none" href="{%url 'weather:requests-list'%}">All requests</a>
-        <a class="me-3 py-2 text-dark text-decoration-none" href="#"></a>
-        <a class="me-3 py-2 text-dark text-decoration-none" href="#"></a>
+{% load static %}
+<header id="header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container text-center">
+            <a class="navbar-brand ms-auto">
+                <object data="{% static 'weather_app/svg/weather_app_logo.svg' %}"></object>
+            </a>
+            <a class="navbar-brand me-auto navbar-logo" href="{% url 'weather:index' %}">
+                WeatherApp
+            </a>
+        </div>
     </nav>
-</div>
+</header>

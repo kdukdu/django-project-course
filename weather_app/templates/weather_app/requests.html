@@ -1,60 +1,59 @@
 {%extends 'weather_app/base.html'%}
 
 {%block content%}
-
-<div class="container">
-    <h2 class="text-center">All Weather Requests</h2>
+<div class="container col-4 mt-4">
+    <h3 class="text-center">All Weather Requests</h3>
 
     {%for city in cities%}
-    <div class="container">
-        <div class="alert alert-info">
-            <div class="row justify-content-md-center">
-                <div class="col-2">
-                    <div class="text-center">
-                        <p class="text-info" style="margin-bottom: 0px;">{{city.time}}</p>
-                        <h5>{{city.name}}</h5>
-                    </div>
-                </div>
+    <div class="container card mb-4">
+        <div class="row justify-content-md-center">
+            <div class="col-2 card-header"></div>
+            <div class="col-8 card-header text-center">
+                {{city.time}}
             </div>
-
-            <div class="row justify-content-md-center">
-                <div class="col-1">
-                    <img src="http://openweathermap.org/img/w/{{city.icon}}.png" alt="icon" class="img"
-                         width="60px">
-                </div>
-                <div class="col-1">
-                    <h2>{{city.temperature}}°C</h2>
-                </div>
+            <div class="col-2 card-header text-end">
+                <form action="{%url 'weather:request-delete' city.pk%}" method="post">
+                    {%csrf_token%}
+                    <button type="submit" name="requests-delete-from-list" value="Delete"
+                            style="border: None;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-x-circle" viewBox="0 0 16 16" id="svg-delete">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path
+                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </button>
+                </form>
             </div>
-
-            <div class="row justify-content-md-center">
-                <div class="col-1">
-                    <form action="{%url 'weather:request-delete' city.pk%}" method="post">
-                        {%csrf_token%}
-                        {%if cities|length > 1%}
-                        <input type="submit" class="btn btn-outline-secondary btn-sm" name="requests-delete-from-list"
-                               value="Delete">
-                        {%else%}
-                        <input type="submit" class="btn btn-outline-secondary btn-sm" name="request-delete-from-list-reverse-index"
-                               value="Delete">
-                        {%endif%}
-                    </form>
-                </div>
+        </div>
+        <div class="row">
+            <div class="col text-center mt-2">
+                <h5>{{city.name}}</h5>
+            </div>
+        </div>
+        <div class="row justify-content-md-center">
+            <div class="col text-end">
+                <img src="http://openweathermap.org/img/w/{{city.icon}}.png" alt="icon" class="img"
+                     width="60px">
+            </div>
+            <div class="col text-start">
+                <h2>{{city.temperature}}°C</h2>
             </div>
         </div>
     </div>
+
+    {%empty%}
+    <div class="container card mb-2 alert alert-danger align-middle">
+        <span class="text-center">There is not any requests yet :(</span>
+    </div>
     {%endfor%}
-
+    <!--Paginator-->
+    <div class="row">
+        {%if page_obj.paginator.count > 4%}
+        {%include 'weather_app/includes/paginator.html'%}
+        {%endif%}
+    </div>
+    <!--End Paginator-->
 </div>
-
-<!--Paginator-->
-<div class="row offset-1">
-    {%if page_obj.paginator.count > 4%}
-    {%include 'weather_app/includes/paginator.html'%}
-    {%endif%}
-</div>
-<!--End Paginator-->
-
-
 {%endblock%}
 
