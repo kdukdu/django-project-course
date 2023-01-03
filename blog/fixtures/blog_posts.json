@@ -1,0 +1,44 @@
+[
+{
+  "model": "blog.post",
+  "pk": 1,
+  "fields": {
+    "title": "Customizing authentication in Django",
+    "slug": "customizing-authentication-in-django",
+    "author": 1,
+    "body": "The authentication that comes with Django is good enough for most common cases, but you may have needs not met by the out-of-the-box defaults. Customizing authentication in your projects requires understanding what points of the provided system are extensible or replaceable. This document provides details about how the auth system can be customized.\r\n\r\nAuthentication backends provide an extensible system for when a username and password stored with the user model need to be authenticated against a different service than Django�s default.\r\n\r\nYou can give your models custom permissions that can be checked through Django�s authorization system.\r\n\r\nYou can extend the default User model, or substitute a completely customized model.",
+    "publish": "2022-12-18T19:58:11.689Z",
+    "created": "2022-12-18T19:58:11.689Z",
+    "updated": "2022-12-18T19:58:11.689Z",
+    "status": "published"
+  }
+},
+{
+  "model": "blog.post",
+  "pk": 2,
+  "fields": {
+    "title": "Design philosophies",
+    "slug": "design-philosophies",
+    "author": 1,
+    "body": "This document explains some of the fundamental philosophies Django�s developers have used in creating the framework. Its goal is to explain the past and guide the future.\r\n\r\nOverall\r\nLoose coupling\r\nA fundamental goal of Django�s stack is loose coupling and tight cohesion. The various layers of the framework shouldn�t �know� about each other unless absolutely necessary.\r\n\r\nFor example, the template system knows nothing about web requests, the database layer knows nothing about data display and the view system doesn�t care which template system a programmer uses.\r\n\r\nAlthough Django comes with a full stack for convenience, the pieces of the stack are independent of another wherever possible.\r\n\r\nLess code\r\nDjango apps should use as little code as possible; they should lack boilerplate. Django should take full advantage of Python�s dynamic capabilities, such as introspection.\r\n\r\nQuick development\r\nThe point of a web framework in the 21st century is to make the tedious aspects of web development fast. Django should allow for incredibly quick web development.\r\n\r\nDon�t repeat yourself (DRY)\r\nEvery distinct concept and/or piece of data should live in one, and only one, place. Redundancy is bad. Normalization is good.\r\n\r\nThe framework, within reason, should deduce as much as possible from as little as possible.\r\n\r\nSee also\r\n\r\nThe discussion of DRY on the Portland Pattern Repository\r\n\r\nExplicit is better than implicit\r\nThis is a core Python principle listed in PEP 20, and it means Django shouldn�t do too much �magic.� Magic shouldn�t happen unless there�s a really good reason for it. Magic is worth using only if it creates a huge convenience unattainable in other ways, and it isn�t implemented in a way that confuses developers who are trying to learn how to use the feature.\r\n\r\nConsistency\r\nThe framework should be consistent at all levels. Consistency applies to everything from low-level (the Python coding style used) to high-level (the �experience� of using Django).",
+    "publish": "2022-12-19T08:34:48.461Z",
+    "created": "2022-12-19T08:34:48.461Z",
+    "updated": "2022-12-19T08:34:48.461Z",
+    "status": "published"
+  }
+},
+{
+  "model": "blog.post",
+  "pk": 3,
+  "fields": {
+    "title": "Creating forms from models",
+    "slug": "creating-forms-from-models",
+    "author": 1,
+    "body": "ModelForm\r\n\r\nclass ModelForm\r\nIf you�re building a database-driven app, chances are you�ll have forms that map closely to Django models. For instance, you might have a BlogComment model, and you want to create a form that lets people submit comments. In this case, it would be redundant to define the field types in your form, because you�ve already defined the fields in your model.\r\n\r\nFor this reason, Django provides a helper class that lets you create a Form class from a Django model.\r\n\r\nField types\r\nThe generated Form class will have a form field for every model field specified, in the order specified in the fields attribute.\r\n\r\nEach model field has a corresponding default form field. For example, a CharField on a model is represented as a CharField on a form. A model ManyToManyField is represented as a MultipleChoiceField. ",
+    "publish": "2022-12-19T08:51:03.065Z",
+    "created": "2022-12-19T08:51:03.065Z",
+    "updated": "2022-12-19T08:51:03.065Z",
+    "status": "published"
+  }
+}
+]
