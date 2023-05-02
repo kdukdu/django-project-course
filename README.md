@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This is my Django Project ✍ written during IT Overone course. 
+This is my Django Project ✍. 
 I got acquainted with the architecture of the Django Framework 🌐:
 - learned how to bind routes to corresponding views 🔀;
 - used either CBV (Class-based views) or FBV (Function-based views) 📋;
